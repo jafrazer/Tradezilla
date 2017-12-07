@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Admin</title>
+		<title>Trade Item</title>
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -13,21 +13,12 @@
 		<![endif]-->
 	</head>
 
-<body>
+	<body>
+	<jsp:include page="pageHeader.jsp" />
+	
 	<div>
-		<!-- Page Heading -->
-		<div class='pageHeader'>
-			<h1>Tradezilla</h1>
-			<!-- Main Menu -->
-			<div class="mainMenu">
-				<h4><a href="home">Home</a></h4>
-			</div>
-			<!-- END Main Menu -->
-		</div>
-		<!-- END Page Heading -->
-		
 		<h3>Trade Item:</h3>
-		${tradeItemInfo.itemName}&nbsp;&nbsp;&nbsp;&nbsp;(${tradeItemInfo.username)
+		${tradeItemInfo.itemName}&nbsp;&nbsp;&nbsp;&nbsp;(${tradeItemInfo.username})
 		<br />
 		<h3>Description:</h3>
 		${tradeItemInfo.itemDescription} <br />

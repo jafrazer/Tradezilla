@@ -14,20 +14,12 @@
 	</head>
 	
 	<body>
-		<!-- Page Heading -->
-		<div class='pageHeader'>
-			<h1>Tradezilla</h1>
-			<!-- Main Menu -->
-			<div class="mainMenu">
-				<h4><a href="home">Home</a></h4>
-			</div>
-			<!-- END Main Menu -->
-		</div>
-		<!-- END Page Heading -->
+		<jsp:include page="pageHeader.jsp" />
+		
+		<h3>Regiater</h3>
 		
  		<div>
- 			<form action="register" method="POST" id="RegisterForm">	
- 				<h3>Registration Details</h3>	
+ 			<form action="register" method="POST" id="RegisterForm">
  				<p>Enter your preferred username and create a password.</p>
 				<table>
                     <tr>

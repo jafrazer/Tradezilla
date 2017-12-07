@@ -32,23 +32,15 @@
 		<![endif]-->
 	</head>
 	<body>
+		<jsp:include page="pageHeader.jsp" />
+		
+		<h3>User Details</h3>
+		
 		<div class="userDetails">
-			<!-- Page Heading -->
-			<div class='pageHeader'>
-				<h1>Tradezilla</h1>
-				<!-- Main Menu -->
-				<div class="mainMenu">
-					<h4><a href="home">Home</a></h4>
-				</div>
-				<!-- END Main Menu -->
-			</div>
-			<!-- END Page Heading -->
-			
-			<h3>User Home</h3>
 			<div class="userHeaderLeft">
 				<table>
 	                	<tr>
-	                	    <td><b>Username:</b> </td>
+	                	    <td><b>Username:</b></td>
 	                    	<td>${userAccountInfo.username}</td>
 		            </tr>
 	    	        </table>

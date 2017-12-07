@@ -16,19 +16,11 @@
 	</head>
 	
 	<body onload='document.loginForm.username.focus();'>
-		<!-- Page Heading -->
-		<div class='pageHeader'>
-			<h1>Tradezilla</h1>
-			<!-- Main Menu -->
-			<div class="mainMenu">
-				<h4><a href="home">Home</a></h4>
-			</div>
-			<!-- END Main Menu -->
-		</div>
-		<!-- END Page Heading -->
+		<jsp:include page="pageHeader.jsp" />
+		
+		<h3>Login</h3>
 	
 		<div id="login-box">
-			<h2>Login</h2>
 			<c:if test="${not empty error}">
 				<div class="error">${error}</div>
 			</c:if>

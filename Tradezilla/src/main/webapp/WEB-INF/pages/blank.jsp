@@ -18,7 +18,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Admin</title>
+		<title>Blank</title>
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -28,16 +28,9 @@
 		<![endif]-->
 	</head>
 	<body>
-		<!-- Page Heading -->
-		<div class='pageHeader'>
-			<h1>Tradezilla</h1>
-			<!-- Main Menu -->
-			<div class="mainMenu">
-				<h4><a href="home">Home</a></h4>
-			</div>
-			<!-- END Main Menu -->
-		</div>
-		<!-- END Page Heading -->
+		<jsp:include page="pageHeader.jsp" />
+		
+		<h3>Blank</h3>
 		
 		<div class="msg">${msg}</div>
 	</body>

@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Admin</title>
+		<title>Create Trade Request</title>
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -14,20 +14,10 @@
 	</head>
 
 <body>
-	<!-- Page Heading -->
-	<div class='pageHeader'>
-		<h1>Tradezilla</h1>
-		<!-- Main Menu -->
-		<div class="mainMenu">
-			<h4><a href="home">Home</a></h4>
-		</div>
-		<!-- END Main Menu -->
-	</div>
-	<!-- END Page Heading -->
+	<jsp:include page="pageHeader.jsp" />
+		
+	<h3>Create Trade Request</h3>
 	
-	<div>
-		<h4><a href="userHome">My Details</a></h4>
-	</div>
 	<div>
 		<form action="createTradeRequest" method="POST" id="CreateTradeRequestForm">
 			<h3>Enter trade item name</h3><input type="text" name="itemName" id="itemName" />

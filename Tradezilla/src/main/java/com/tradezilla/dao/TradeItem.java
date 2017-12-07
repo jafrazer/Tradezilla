@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.tradezilla.model.TradeItemInfo;
 
-public class TradeItem {
+public class TradeItem extends DefaultDAO {
 
 
 	@Autowired
@@ -33,10 +33,6 @@ public class TradeItem {
 	
 	public TradeItem(String username, String itemName, String itemDescription) {
 		createTradeItem(username, itemName, itemDescription);
-	}
-
-	public TradeItem(DataSource dataSource) {
-	    jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
 	public TradeItemInfo createTradeItem(final String username, final String itemName, final String itemDescription) {

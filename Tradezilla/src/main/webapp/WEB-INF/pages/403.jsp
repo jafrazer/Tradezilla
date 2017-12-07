@@ -14,27 +14,16 @@
 	</head>
 
 <body>
-	<!-- Page Heading -->
-	<div class='pageHeader'>
-		<h1>Tradezilla</h1>
-		<!-- Main Menu -->
-		<div class="mainMenu">
-			<h4><a href="home">Home</a></h4>
-		</div>
-		<!-- END Main Menu -->
-	</div>
-	<!-- END Page Heading -->
+	<jsp:include page="pageHeader.jsp" />
 	
-	<h1>HTTP Status 403 - Access is denied</h1>
+	<h3>HTTP Status 403 - Access is denied</h3>
 
 	<c:choose>
 		<c:when test="${empty username}">
-			<h2>You do not have permission to access this page!</h2>
+			<h4>You do not have permission to access this page!</h4>
 		</c:when>
 		<c:otherwise>
-			<h2>
-				Username : ${username} <br /> You do not have permission to access this page!
-			</h2>
+			<h4>Username : ${username} <br /> You do not have permission to access this page!</h4>
 		</c:otherwise>
 	</c:choose>
 
