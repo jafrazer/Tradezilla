@@ -65,6 +65,16 @@
 				</sec:authorize>
 			</div>
         </div>
+	
+		<div class='tradeRequests'>
+			<h3>My Trade Requests</h3>
+			<c:choose>
+				<c:when test="${empty tradeItemList}">There are no trade requests listed.</c:when>
+				<c:otherwise>
+					<c:forEach items="${tradeItemList}" var="item"><a href="">${item.itemName}</a> - ${item.description}</c:forEach>
+				</c:otherwise>
+			</c:choose>
+		</div>
         
 	</body>
 </html>

@@ -21,6 +21,7 @@
 				<h3> | 
 					<a href="home">Home</a> | 
 					<a href="userDetails">User Details</a> | 
+					<a href="createTradeRequest">Create Trade Request</a> | 
 					<a href="login">Login</a> | 
 					<a href="register">Register</a> | 
 				</h3>

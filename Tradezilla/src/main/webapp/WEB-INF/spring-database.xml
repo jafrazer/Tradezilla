@@ -17,6 +17,10 @@
 	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean> -->
+
+	<bean id="defaultDAO" class="com.tradezilla.dao.DefaultDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
  
 	<bean id="user" class="com.tradezilla.dao.User">
 		<property name="dataSource" ref="dataSource" />
@@ -27,6 +31,10 @@
 	</bean>
 
 	<bean id="admin" class="com.tradezilla.dao.Admin">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="tradeItem" class="com.tradezilla.dao.TradeItem">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
  

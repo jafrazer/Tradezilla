@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+import com.tradezilla.model.TradeItemInfo;
 import com.tradezilla.model.UserAccountInfo;
 
 public class DefaultDAO {
@@ -53,5 +54,31 @@ public class DefaultDAO {
 		}
 
 		return userList;
+	}
+	
+	
+	
+	
+
+	public ResultSetExtractor<ArrayList<TradeItemInfo>> rseTradeItemInfoArrayList = new ResultSetExtractor<ArrayList<TradeItemInfo>>() {
+		public ArrayList<TradeItemInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
+			return readTradeItemInfoArrayList(rs);
+		}
+	};
+	
+	private ArrayList<TradeItemInfo> readTradeItemInfoArrayList(ResultSet rs) throws SQLException {
+		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
+
+		while (rs.next()) {
+			TradeItemInfo tradeItemInfo = new TradeItemInfo();
+			tradeItemInfo.setItemId(rs.getString("id"));
+			tradeItemInfo.setItemName(rs.getString("itemName"));
+			tradeItemInfo.setUsername(rs.getString("username"));
+			tradeItemInfo.setDescription(rs.getString("description"));
+
+			tradeItemList.add(tradeItemInfo);
+		}
+
+		return tradeItemList;
 	}
 }

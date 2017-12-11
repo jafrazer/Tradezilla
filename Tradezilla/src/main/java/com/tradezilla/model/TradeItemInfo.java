@@ -8,7 +8,7 @@ public class TradeItemInfo {
 	private String itemId;
 	private String itemName;
 	private String username;
-	private String itemDescription;
+	private String description;
 
 	public TradeItemInfo() {
 		super();
@@ -19,7 +19,7 @@ public class TradeItemInfo {
 		this.setItemId(itemId);
 		this.setItemName(itemName);
 		this.setUsername(username);
-		this.setItemDescription(itemDescription);
+		this.setDescription(itemDescription);
 	}
 
 	public String getItemId() {
@@ -38,12 +38,12 @@ public class TradeItemInfo {
 		this.itemName = itemName;
 	}
 
-	public String getItemDescription() {
-		return itemDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
+	public void setDescription(String itemDescription) {
+		this.description = itemDescription;
 	}
 
 	public String getUsername() {

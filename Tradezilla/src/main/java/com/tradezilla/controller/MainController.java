@@ -36,7 +36,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tradezilla.dao.Admin;
 import com.tradezilla.dao.Register;
+import com.tradezilla.dao.TradeItem;
 import com.tradezilla.dao.User;
+import com.tradezilla.model.TradeItemInfo;
 import com.tradezilla.model.UserAccountInfo;
 
 @Controller
@@ -50,6 +52,9 @@ public class MainController {
 	
 	@Autowired
 	Admin admin;
+	
+	@Autowired
+	TradeItem tradeItem;
 
 	/***************************************************************************************
 	 * 
@@ -138,25 +143,12 @@ public class MainController {
 
 		// Read the logged in user's details
 		UserAccountInfo userAccountInfo = user.readUserAccountInfo(currentUserName);
-
 		modelAndView.addObject("userAccountInfo", userAccountInfo);
 		modelAndView.setViewName("userDetails");
-
-//		// Get a list of the groups that the user is a member of
-//		ArrayList<GroupInfo> groupList = group.readGroupList(currentUserName);
-//		modelAndView.addObject("groupList", groupList);
-//
-//		// Get a list of the groups that the user has pending invites to join
-//		ArrayList<GroupInfo> groupInvites = group.findGroupInvites(currentUserName);
-//		modelAndView.addObject("groupInvites", groupInvites);
-//
-//		// Get a list of the events that the user has accepted invites to
-//		ArrayList<EventInfo> eventList = event.readUserEventList(currentUserName);
-//		modelAndView.addObject("eventList", eventList);
-//
-//		// Get a list of the events that the user has pending invites to attend
-//		ArrayList<EventInfo> eventInvites = event.findEventInvites(currentUserName);
-//		modelAndView.addObject("eventInvites", eventInvites);
+		
+		// read the user's trade requests
+		ArrayList<TradeItemInfo> tradeItemList = tradeItem.readTradeItemListForUser(currentUserName);
+		modelAndView.addObject("tradeItemList", tradeItemList);
 
 		return modelAndView;
 	}
@@ -232,6 +224,49 @@ public class MainController {
 		return modelAndView;
 	}
 	
+	
+	@RequestMapping(value = "/createTradeRequest", method = RequestMethod.POST)
+	public ModelAndView createTradeRequest(
+			@ModelAttribute("itemName") String itemName,
+			@ModelAttribute("description") String description,
+			@ModelAttribute("username") String username) {
+
+		ModelAndView modelAndView = new ModelAndView();
+		TradeItemInfo tradeItemInfo = new TradeItemInfo();
+		modelAndView.setViewName("tradeItemInfo");
+
+		tradeItemInfo.setItemName(itemName);
+		tradeItemInfo.setDescription(description);
+		tradeItemInfo.setUsername(username);
+		tradeItemInfo = tradeItem.createTradeItem(tradeItemInfo);
+
+		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
+
+		return modelAndView;
+
+	}
+
+//	@RequestMapping(value = "/viewTradeItem", method = RequestMethod.POST)
+//	public ModelAndView viewTradeItem(
+//			@ModelAttribute("itemName") String itemName,
+//			@ModelAttribute("id") String itemId,
+//			@ModelAttribute("username") String username) {
+//
+//		ModelAndView modelAndView = new ModelAndView();
+//		TradeItemInfo tradeItemInfo = new TradeItemInfo();
+//		modelAndView.setViewName("tradeItemHome");
+//
+//		TradeItem tradeItem = new TradeItem();
+//		tradeItemInfo.setItemName(itemName);
+//		tradeItemInfo.setUsername(username);
+//		tradeItemInfo = tradeItem.readTradeItem(tradeItemInfo);
+//
+//		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
+//
+//		return modelAndView;
+//
+//	}
+	
 	/***************************************************************************************
 	 * Method to approve a user and activate their account
 	 * 
@@ -263,183 +298,6 @@ public class MainController {
 		return modelAndView;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-//	/***************************************************************************************
-//	 * Method to accept a group invitation
-//	 * 
-//	 * @param username - Username of the user accepting the group invite
-//	 * @param groupName - Name of the group the user is invited to join
-//	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-//	 * 
-//	 ***************************************************************************************/
-//	@RequestMapping(value = "/acceptGroupInvite", method = RequestMethod.POST)
-//	public ModelAndView acceptGroupInvite(@ModelAttribute("username") String username,
-//		@ModelAttribute("groupName") String groupName) {
-//
-//		// Get the currently logged in user
-//		String currentUserName = "";
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//			currentUserName = authentication.getName();
-//		}
-//
-//		ModelAndView modelAndView = new ModelAndView();
-//		boolean badRequest = false;
-//		
-//		// Ensure the username passed from the client matches the logged in user
-//		if (!currentUserName.equals(username)) {
-//			badRequest = true;
-//		} else {
-//
-////			// Check that the user does in fact have a pending invite to the group
-////			ArrayList<GroupInfo> groupList = group.findGroupInvites(currentUserName);
-////			boolean groupFound = false;
-////		
-////			for (int i = 0; i < groupList.size(); i++) {
-////				if (groupList.get(i).getGroupName().equals(groupName)) {
-////					groupFound = true;
-////				}
-////			}
-////			if (!groupFound) {
-////				badRequest = true;				
-////			}
-//		}
-//
-//		// If the details passed from the client are not authentic, deny access
-//		if (badRequest) {
-//
-//			UserDetails userDetail = (UserDetails) authentication.getPrincipal();
-//			System.out.println(userDetail);
-//			
-//			modelAndView.addObject("username", userDetail.getUsername());
-//			modelAndView.setViewName("403");
-//	
-//		} else {
-//
-////			// Accept the invite
-////			group.acceptGroupInvite(username, groupName);
-////	
-////			UserAccountInfo userAccountInfo = user.readUserAccountInfo(username);
-////
-////			modelAndView.addObject("userAccountInfo", userAccountInfo);
-////			modelAndView.setViewName("userDetails");
-////			
-////			// Get a list of the groups that the user is a member of
-////			ArrayList<GroupInfo> groupList = group.readGroupList(username);
-////			modelAndView.addObject("groupList", groupList);
-////	
-////			// Get a list of the groups that the user has pending invites to join
-////			ArrayList<GroupInfo> groupInvites = group.findGroupInvites(username);
-////			modelAndView.addObject("groupInvites", groupInvites);
-////	
-////			// Get a list of the events that the user has accepted invites to
-////			ArrayList<EventInfo> eventList = event.readUserEventList(username);
-////			modelAndView.addObject("eventList", eventList);
-////	
-////			// Get a list of the events that the user has pending invites to attend
-////			ArrayList<EventInfo> eventInvites = event.findEventInvites(username);
-////			modelAndView.addObject("eventInvites", eventInvites);
-//		}
-//
-//		return modelAndView;
-//
-//	}
-//	
-//	/***************************************************************************************
-//	 * Method to accept an event invitation 
-//	 * 
-//	 * @param username - Username of the user accepting the event invite
-//	 * @param groupName - Name of the group the event belongs to
-//	 * @param eventName - Name of the event
-//	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-//	 * 
-//	 ***************************************************************************************/
-//	@RequestMapping(value = "/acceptEventInvite", method = RequestMethod.POST)
-//	public ModelAndView acceptEventInvite(@ModelAttribute("username") String username,
-//		@ModelAttribute("groupName") String groupName,
-//		@ModelAttribute("eventName") String eventName) {
-//		
-//		// Get the currently logged in user
-//		String currentUserName = "";
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//			currentUserName = authentication.getName();
-//		}
-//
-//		ModelAndView modelAndView = new ModelAndView();
-//		boolean badRequest = false;
-//		
-//		// Ensure the username passed from the client matches the logged in user
-//		if (!currentUserName.equals(username)) {
-//			badRequest = true;
-//		} else {
-//
-////			// Check that the user is a member of the group the event invite is for
-////			ArrayList<GroupInfo> groupList = group.readGroupList(currentUserName);
-////			boolean groupFound = false;
-////		
-////			for (int i = 0; i < groupList.size(); i++) {
-////				if (groupList.get(i).getGroupName().equals(groupName)) {
-////					groupFound = true;
-////				}
-////			}
-////			if (!groupFound) {
-////				badRequest = true;				
-////			}
-//
-//		}
-//
-//		// If the details passed from the client are not authentic, deny access
-//		if (badRequest) {
-//			UserDetails userDetail = (UserDetails) authentication.getPrincipal();
-//			System.out.println(userDetail);
-//			
-//			modelAndView.addObject("username", userDetail.getUsername());
-//			modelAndView.setViewName("403");
-//	
-//		} else {
-//
-////			// Accept the invite
-////			event.acceptEventInvite(username, groupName, eventName);
-////	
-////			UserAccountInfo userAccountInfo = user.readUserAccountInfo(username);
-////	
-////			modelAndView.addObject("userAccountInfo", userAccountInfo);
-////			modelAndView.setViewName("userDetails");
-////			
-////			// Get a list of the groups that the user is a member of
-////			ArrayList<GroupInfo> groupList = group.readGroupList(username);
-////			modelAndView.addObject("groupList", groupList);
-////	
-////			// Get a list of the groups that the user has pending invites to join
-////			ArrayList<GroupInfo> groupInvites = group.findGroupInvites(username);
-////			modelAndView.addObject("groupInvites", groupInvites);
-////	
-////			// Get a list of the events that the user has accepted invites to
-////			ArrayList<EventInfo> eventList = event.readUserEventList(username);
-////			modelAndView.addObject("eventList", eventList);
-////	
-////			// Get a list of the events that the user has pending invites to attend
-////			ArrayList<EventInfo> eventInvites = event.findEventInvites(username);
-////			modelAndView.addObject("eventInvites", eventInvites);
-//		}
-//
-//		return modelAndView;
-//
-//	}
 
 	/***************************************************************************************
 	 * 
@@ -462,10 +320,9 @@ public class MainController {
 			modelAndView.addObject("username", userDetail.getUsername());
 			
 		}
-		
 		modelAndView.setViewName("403");
+		
 		return modelAndView;
-
 	}
 	
 	/***************************************************************************************
@@ -489,10 +346,9 @@ public class MainController {
 			modelAndView.addObject("username", userDetail.getUsername());
 			
 		}
-		
 		modelAndView.setViewName("403");
+		
 		return modelAndView;
-
 	}
 
 }

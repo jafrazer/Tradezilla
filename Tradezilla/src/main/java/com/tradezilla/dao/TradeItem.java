@@ -1,41 +1,41 @@
 package com.tradezilla.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.tradezilla.model.TradeItemInfo;
 
 public class TradeItem extends DefaultDAO {
-
-
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	
-	private ResultSetExtractor<ArrayList<TradeItemInfo>> rseTradeItemInfoArrayList = new ResultSetExtractor<ArrayList<TradeItemInfo>>() {
-		public ArrayList<TradeItemInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
-			return readTradeItemInfoArrayList(rs);
-		}
-	};
 	
 	public TradeItem() {
 		// Empty Constructor
 	}
 	
+	/**
+	 * Overloaded constructor which will create a trade request based on the information provided.
+	 * 
+	 * @param username
+	 * @param itemName
+	 * @param itemDescription
+	 */
 	public TradeItem(String username, String itemName, String itemDescription) {
 		createTradeItem(username, itemName, itemDescription);
 	}
 	
+	/**
+	 * 
+	 * @param username
+	 * @param itemName
+	 * @param itemDescription
+	 * @return
+	 */
 	public TradeItemInfo createTradeItem(final String username, final String itemName, final String itemDescription) {
+
+		jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String sql = "INSERT INTO trade_item (itemName, username, description) VALUES (?,?,?)";
 		
@@ -52,7 +52,39 @@ public class TradeItem extends DefaultDAO {
 		return readByUsernameAndItemName(username, itemName);
 	}
 
+	/**
+	 * 
+	 * @param tradeItemInfo
+	 * @return
+	 */
+	public TradeItemInfo createTradeItem(final TradeItemInfo tradeItemInfo) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		String sql = "INSERT INTO trade_item (itemName, username, description) VALUES (?,?,?)";
+		
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, tradeItemInfo.getItemName());
+				ps.setString(2, tradeItemInfo.getUsername());
+				ps.setString(2, tradeItemInfo.getDescription());
+			}
+		};
+		
+		jdbcTemplate.update(sql, pss);	
+		
+		return readByUsernameAndItemName(tradeItemInfo.getUsername(), tradeItemInfo.getItemName());
+	}
+
+	/**
+	 * 
+	 * @param username
+	 * @param itemName
+	 * @return
+	 */
 	public TradeItemInfo readByUsernameAndItemName(final String username, final String itemName) {
+		
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 		
 		String sql = "SELECT * FROM trade_items WHERE username = ? AND itemName = ?";
@@ -71,14 +103,21 @@ public class TradeItem extends DefaultDAO {
 			return null;
 	}
 
+	/**
+	 * 
+	 * @param tradeItemInfo
+	 * @return
+	 */
 	public TradeItemInfo readTradeItem(final TradeItemInfo tradeItemInfo) {
+		
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 		
 		String sql = "SELECT * FROM trade_items WHERE itemId = ? AND username = ?";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, tradeItemInfo.getItemId());
-				ps.setString(2, tradeItemInfo.getUsername());
+				ps.setString(1, tradeItemInfo.getUsername());
 			}
 		};
 		
@@ -90,7 +129,15 @@ public class TradeItem extends DefaultDAO {
 			return null;
 	}
 
+	/**
+	 * 
+	 * @param currentUserName
+	 * @return
+	 */
 	public ArrayList<TradeItemInfo> readTradeItemListForUser(final String currentUserName) {
+		
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		
 		ArrayList<TradeItemInfo> usersTradeItems = new ArrayList<TradeItemInfo>();
 		
 		String sql = "SELECT * FROM trade_items WHERE username = ?";
@@ -102,21 +149,5 @@ public class TradeItem extends DefaultDAO {
 		
 		usersTradeItems = jdbcTemplate.query(sql, pss, rseTradeItemInfoArrayList);
 		return usersTradeItems;
-	}
-	
-	private ArrayList<TradeItemInfo> readTradeItemInfoArrayList(ResultSet rs) throws SQLException {
-		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
-
-		while (rs.next()) {
-			TradeItemInfo tradeItemInfo = new TradeItemInfo();
-			tradeItemInfo.setItemId(rs.getString("itemId"));
-			tradeItemInfo.setItemName(rs.getString("itemName"));
-			tradeItemInfo.setUsername(rs.getString("username"));
-			tradeItemInfo.setItemDescription(rs.getString("itemDescription"));
-
-			tradeItemList.add(tradeItemInfo);
-		}
-
-		return tradeItemList;
 	}
 }

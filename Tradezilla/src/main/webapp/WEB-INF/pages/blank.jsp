@@ -18,7 +18,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Blank</title>
+		<title>Message</title>
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -30,7 +30,7 @@
 	<body>
 		<jsp:include page="pageHeader.jsp" />
 		
-		<h3>Blank</h3>
+		<h3>Message</h3>
 		
 		<div class="msg">${msg}</div>
 	</body>

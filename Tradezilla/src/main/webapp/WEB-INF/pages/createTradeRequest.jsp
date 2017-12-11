@@ -13,20 +13,18 @@
 		<![endif]-->
 	</head>
 
-<body>
-	<jsp:include page="pageHeader.jsp" />
-		
-	<h3>Create Trade Request</h3>
-	
-	<div>
-		<form action="createTradeRequest" method="POST" id="CreateTradeRequestForm">
-			<h3>Enter trade item name</h3><input type="text" name="itemName" id="itemName" />
-			<h3>Enter trade item description</h3><input type="text" name="itemDescription" id="itemDescription" />
-			<input type="submit" value="Create" />
-			<input type="hidden" name="username" value="${username}" />
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</form>
-		<h3>${message}</h3>
-	</div>
-</body>
+	<body>
+		<jsp:include page="pageHeader.jsp" />
+			
+		<h3>Create Trade Request</h3>
+		<div>
+			<form action="createTradeRequest" method="POST" id="CreateTradeRequestForm">
+				<h3>Enter trade item name: </h3><input type="text" name="itemName" id="itemName" value="${tradeItemInfo.itemName}"/>
+				<h3>Enter trade item description: </h3><input type="text" name="description" id="description" value="${tradeItemInfo.description}"/>
+				<input type="submit" value="Create" />
+				<input type="hidden" name="username" value="${tradeItemInfo.username}" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			</form>
+		</div>
+	</body>
 </html>
