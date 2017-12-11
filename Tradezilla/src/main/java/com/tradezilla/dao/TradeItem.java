@@ -27,18 +27,19 @@ public class TradeItem extends DefaultDAO {
 	}
 	
 	/**
+	 * Method to insert a record into the trade request table
 	 * 
 	 * @param username
 	 * @param itemName
 	 * @param itemDescription
-	 * @return
+	 * 
+	 * @return The created object, including an object id
 	 */
 	public TradeItemInfo createTradeItem(final String username, final String itemName, final String itemDescription) {
 
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String sql = "INSERT INTO trade_item (itemName, username, description) VALUES (?,?,?)";
-		
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, itemName);
@@ -47,15 +48,19 @@ public class TradeItem extends DefaultDAO {
 			}
 		};
 		
+		// TODO Ensure that there is no record with this name already created for this user
+		
 		jdbcTemplate.update(sql, pss);	
 		
 		return readByUsernameAndItemName(username, itemName);
 	}
 
 	/**
+	 * Method to insert a record into the trade request table
 	 * 
 	 * @param tradeItemInfo
-	 * @return
+	 * 
+	 * @return The created object, including an object id
 	 */
 	public TradeItemInfo createTradeItem(final TradeItemInfo tradeItemInfo) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
@@ -70,15 +75,19 @@ public class TradeItem extends DefaultDAO {
 			}
 		};
 		
+		// TODO Ensure that there is no record with this name already created for this user
+		
 		jdbcTemplate.update(sql, pss);	
 		
 		return readByUsernameAndItemName(tradeItemInfo.getUsername(), tradeItemInfo.getItemName());
 	}
 
 	/**
+	 * Read a trade request by the username and item name
 	 * 
 	 * @param username
 	 * @param itemName
+	 * 
 	 * @return
 	 */
 	public TradeItemInfo readByUsernameAndItemName(final String username, final String itemName) {
@@ -104,20 +113,21 @@ public class TradeItem extends DefaultDAO {
 	}
 
 	/**
+	 * Read the trade request by the id
 	 * 
 	 * @param tradeItemInfo
 	 * @return
 	 */
-	public TradeItemInfo readTradeItem(final TradeItemInfo tradeItemInfo) {
+	public TradeItemInfo readTradeItemById(final TradeItemInfo tradeItemInfo) {
 		
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 		
-		String sql = "SELECT * FROM trade_items WHERE itemId = ? AND username = ?";
+		String sql = "SELECT * FROM trade_items WHERE itemId = ?";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, tradeItemInfo.getUsername());
+				ps.setString(1, tradeItemInfo.getItemId());;
 			}
 		};
 		
@@ -130,6 +140,7 @@ public class TradeItem extends DefaultDAO {
 	}
 
 	/**
+	 * Read all trade requests posted by this user.
 	 * 
 	 * @param currentUserName
 	 * @return
@@ -148,6 +159,7 @@ public class TradeItem extends DefaultDAO {
 		};
 		
 		usersTradeItems = jdbcTemplate.query(sql, pss, rseTradeItemInfoArrayList);
+		
 		return usersTradeItems;
 	}
 }

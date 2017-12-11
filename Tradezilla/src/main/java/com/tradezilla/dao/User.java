@@ -5,6 +5,7 @@
  * 		(Mkyong, 2017)
  * - https://stackoverflow.com/questions/2989245/using-prepared-statements-with-jdbctemplate
  * 		(stackoverflow, 2010)
+ * - With thanks to Carl Leslie for his help with getting the project environment running using his code.
  * 
  */
 
@@ -25,21 +26,20 @@ public class User extends DefaultDAO {
 		//  Empty constructor
 	}
 
-	/***************************************************************************************
-	 * This method returns the user details associated with the username
+	/**
+	 * This method returns the account details for the given username
 	 * 
-	 * @param username - Username of the member whose details are requested
-	 * @return - User details
-	 * 
-	 ***************************************************************************************/
+	 * @param username Member whose details are requested
+	 * @return User account details
+	 */
 	public UserAccountInfo readUserAccountInfo(final String username) {
 	
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
 		String sql = "SELECT username FROM users WHERE username = ?";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-			public void setValues(PreparedStatement preparedStatement) throws SQLException {
-				preparedStatement.setString(1, username);
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, username);
 			}
 		};
 

@@ -20,28 +20,32 @@ public class DefaultDAO {
 	DataSource dataSource;
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
+
 	/**
+	 * Populate the javabean datasource
 	 * 
 	 * @param dataSource
 	 */
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
+
 	/**
-	 * 
+	 * Parse the UserAccountInfo into an ArrayList for the ResultSet using ResultSetExtractor
 	 */
 	protected ResultSetExtractor<ArrayList<UserAccountInfo>> rseUserAccountInfoArrayList = new ResultSetExtractor<ArrayList<UserAccountInfo>>() {
 		public ArrayList<UserAccountInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
 			return readUserAccountInfoArrayList(rs);
 		}
 	};
-	
+
 	/**
+	 * Read the data directly out of the ResultSet into an ArrayList of UserAccountInfo objects.
 	 * 
 	 * @param rs
+	 * 
 	 * @return
+	 * 
 	 * @throws SQLException
 	 */
 	private ArrayList<UserAccountInfo> readUserAccountInfoArrayList(ResultSet rs) throws SQLException {
@@ -56,16 +60,24 @@ public class DefaultDAO {
 		return userList;
 	}
 	
-	
-	
-	
-
+	/**
+	 * Parse the TradeItemInfo into an ArrayList for the ResultSet using ResultSetExtractor
+	 */
 	public ResultSetExtractor<ArrayList<TradeItemInfo>> rseTradeItemInfoArrayList = new ResultSetExtractor<ArrayList<TradeItemInfo>>() {
 		public ArrayList<TradeItemInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
 			return readTradeItemInfoArrayList(rs);
 		}
 	};
-	
+
+	/**
+	 * Read the data directly out of the ResultSet into an ArrayList of TradeItemInfo objects.
+	 * 
+	 * @param rs
+	 * 
+	 * @return
+	 * 
+	 * @throws SQLException
+	 */
 	private ArrayList<TradeItemInfo> readTradeItemInfoArrayList(ResultSet rs) throws SQLException {
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 

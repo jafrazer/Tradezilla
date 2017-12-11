@@ -7,6 +7,7 @@
  * - https://stackoverflow.com/questions/2989245/using-prepared-statements-with-jdbctemplate
  * 		(stackoverflow, 2010)
  * 
+ * - With thanks to Carl Leslie for his help with getting the project environment running using his code.
  */
 
 package com.tradezilla.dao;
@@ -23,10 +24,11 @@ import com.tradezilla.model.UserAccountInfo;
 public class Admin extends DefaultDAO {
 
 	/**
+	 * Read a list of users who have applied for membership and are awaiting approval.
 	 * 
-	 * @return
+	 * @return 
 	 */
-	public ArrayList<UserAccountInfo> readCandidateUsers() {
+	public ArrayList<UserAccountInfo> listUsersForApproval() {
 
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
@@ -41,15 +43,10 @@ public class Admin extends DefaultDAO {
 	}
 
 	/**
-	 * 
-	 */
-	public void listUsersForApproval() {
-
-	}
-
-	/**
+	 * Approve the submitted user
 	 * 
 	 * @param username
+	 * 
 	 * @return
 	 */
 	public String approveUser(final String username) {

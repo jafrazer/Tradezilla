@@ -1,4 +1,25 @@
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix = "form"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- Code References:
+	 http://www.mkyong.com/tutorials/spring-security-tutorials/
+	  		(Mkyong, 2017)
+	  
+	 https://www.tutorialspoint.com/jsp/jstl_core_url_tag.htm
+	 		(tutorialspoint, 2017)
+	  
+	 https://stackoverflow.com/questions/4286466/use-a-normal-link-to-submit-a-form
+	 		(stackoverflow)
+	  
+	 www.youtube.com 
+	  		(Shoaib Khan, 2012)
+	 		(Brandon Jones, 2015)
+	 		(IntoProgram, 2015)
+	 		(Thamizh arasaN, 2014)
+	 		(Codebun, 2017)
+	 		(ArtiVisi Intermedia, 2013)
+ --> 
+ 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>

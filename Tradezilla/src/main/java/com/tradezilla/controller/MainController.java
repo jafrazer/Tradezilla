@@ -16,6 +16,7 @@
  * - http://www.baeldung.com/get-user-in-spring-security
  * 		(Baeldung, 2017)
  * 
+ * - With thanks to Carl Leslie for his help with getting the project environment running using his code.
  */
 
 package com.tradezilla.controller;
@@ -38,6 +39,7 @@ import com.tradezilla.dao.Admin;
 import com.tradezilla.dao.Register;
 import com.tradezilla.dao.TradeItem;
 import com.tradezilla.dao.User;
+import com.tradezilla.db.DataSanitization;
 import com.tradezilla.model.TradeItemInfo;
 import com.tradezilla.model.UserAccountInfo;
 
@@ -56,194 +58,207 @@ public class MainController {
 	@Autowired
 	TradeItem tradeItem;
 
-	/***************************************************************************************
+	/**
+	 * Method to direct to the main page
 	 * 
-	 * Method to return the main page
-	 * 
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView object containing the view name and all details to be displayed
+	 */
 	@RequestMapping(value = { "/", "/welcome**", "/home" }, method = RequestMethod.GET)
 	public ModelAndView defaultPage() {
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("title", "Spring Security Login Form - Database Authentication");
-		modelAndView.addObject("message", "This is default page!");
-		modelAndView.setViewName("index");
-		return modelAndView;
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("index");
+		
+		mav.addObject("title", "Title for the home page. This is not used in the live application.");
+		mav.addObject("message", "Message for the home page. This is not used in the live application.");
+		
+		return mav;
 	}
 
-	/***************************************************************************************
+	/**
+	 * This method directs to the admin page, which is accessible only to users with the role of admin.
 	 * 
-	 * Method to link to the role protected admin page
-	 * 
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView containing the view name and a list of all user accounts pending approval.
+	 */
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
 
-		ModelAndView modelAndView = new ModelAndView();
-		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("admin");
 		
-		// Include a list of all unapproved user accounts
-		modelAndView.addObject("userList", userList);
-		modelAndView.setViewName("admin");
+//		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
+		
+		// Display a list of user accounts pending approval
+		mav.addObject("userList", admin.listUsersForApproval());
 
-		return modelAndView;
-
+		return mav;
 	}
 
-	/***************************************************************************************
-	 * Method to return the login page
+	/**
+	 * This method directs a user to the login page, and optionally displays a message based on whether the user has just logged out, or if there was an error with the user credentials.
 	 * 
-	 * @param error - indicates if an error has occurred during login
-	 * @param logout - indicates successful logout
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 *
-	 ***************************************************************************************/
+	 * @param error indicates if an error has occurred during login
+	 * @param logout indicates successful logout
+	 * 
+	 * @return A ModelAndView containing the view name and the return message.
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
-		ModelAndView modelAndView = new ModelAndView();
-		if (error != null) {
-			modelAndView.addObject("error", "Invalid username and password!");
-		}
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("login");
+		
+		if (error != null)
+			mav.addObject("error", "Invalid username and password combination!");
 
-		if (logout != null) {
-			modelAndView.addObject("msg", "You've been logged out successfully.");
-		}
-		modelAndView.setViewName("login");
-
-		return modelAndView;
+		if (logout != null) 
+			mav.addObject("msg", "You've been logged out successfully.");
+		
+		return mav;
 
 	}
 	
-	/***************************************************************************************
-	 * Method to return the user details on successful login
+	/**
+	 * Returns user's details after successful login attempt
 	 * 
-	 * @param error - indicates if an error has occurred during login
-	 * @param logout - indicates successful logout
+	 * @param error indicates if an error has occurred during login
+	 * @param logout indicates successful logout
+	 * 
 	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 */
 	@RequestMapping(value = "/userDetails", method = RequestMethod.GET)
-	public ModelAndView loginSuccess(@RequestParam(value = "error", required = false) String error,
+	public ModelAndView loginSuccess(
+			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
 		// Get the currently logged in user
 		String currentUserName ="";
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-		    currentUserName = authentication.getName();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    currentUserName = auth.getName();
 		}
 		
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("userDetails");
 
-		// Read the logged in user's details
+		// Read the details for the current user
 		UserAccountInfo userAccountInfo = user.readUserAccountInfo(currentUserName);
-		modelAndView.addObject("userAccountInfo", userAccountInfo);
-		modelAndView.setViewName("userDetails");
+		mav.addObject("userAccountInfo", userAccountInfo);
 		
 		// read the user's trade requests
 		ArrayList<TradeItemInfo> tradeItemList = tradeItem.readTradeItemListForUser(currentUserName);
-		modelAndView.addObject("tradeItemList", tradeItemList);
+		mav.addObject("tradeItemList", tradeItemList);
 
-		return modelAndView;
+		return mav;
 	}
 
-	/***************************************************************************************
+	/**
+	 * This method returns the blank registration page
 	 * 
-	 * Method to return the blank registration page
-	 * 
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView containing the view name and the user details
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView showRegisterPage() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("userDetails", new UserAccountInfo());
-		modelAndView.setViewName("register");
-		return modelAndView;
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("register");
+		
+		mav.addObject("userDetails", new UserAccountInfo());
+		
+		return mav;
 	}
 	
-	/***************************************************************************************
+	/**
 	 * Method to register the user with the details entered
 	 * 
-	 * @param userDetails - registration details entered by the user
-	 * @param confirmPassword - password confirmation entered by the user
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
+	 * @param userDetails Registration details entered by the user
+	 * @param confirmPassword Password confirmation entered by the user
 	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView containing the view name, a result, and a message
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ModelAndView registerMember(@ModelAttribute("memberDetails") UserAccountInfo userDetails,
-		@ModelAttribute("confirmPassword") String confirmPassword) {
+	public ModelAndView registerMember(
+			@ModelAttribute("memberDetails") UserAccountInfo userDetails,
+			@ModelAttribute("confirmPassword") String confirmPassword) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-		String message = "";
 		String result = "";
 		
-		// Check if the user's chosen username is available
-		boolean usernameExists = register.checkForDuplicateUsername(userDetails.getUsername());
-		
-		// If the username is not available, return the user a message asking them to select a different username
-		if (usernameExists) {
-			message = "This username is not available.";
-
-			modelAndView.addObject("userDetails", userDetails);
-			modelAndView.addObject("message", message);
+		// Check if the entered username is available
+		if (register.checkForDuplicateUsername(userDetails.getUsername())) {
+			// If the username is not available, return an info message
 			modelAndView.setViewName("register");
+			
+			modelAndView.addObject("userDetails", userDetails);
+			modelAndView.addObject("message", "This username is not available.");
+			
 			return modelAndView;
 			
 		} else {
-			
-			// Ensure the password entered matches the confirmed password entered
+			// Check that the passwords match
 			if (!(userDetails.getPassword().equals(confirmPassword))) {
-				message = "Passwords do not match.  Please re-enter and confirm your password";
+				modelAndView.setViewName("register");
 
 				modelAndView.addObject("userDetails", userDetails);
-				modelAndView.addObject("message", message);
-				modelAndView.setViewName("register");
+				modelAndView.addObject("message", "Passwords do not match.  Please re-enter and confirm your password");
+				
 				return modelAndView;
 
 			} else {
-				// Add the user's details to the database (account will be disabled until approved)
+				// Insert the user details in the database.
+				// This creates an account that needs to be approved by an admin.
 				result = register.register(userDetails);
 			}
 		}
 		
 		// Display a message telling the user that registration was successful and is now pending approval
 		if (result.equals("Success")) {
-			message = "You have successfully registered for an account.  You will be notified when your account has been approved for use.";
-			
-			modelAndView.addObject("msg", message);
 			modelAndView.setViewName("blank");
+			
+			modelAndView.addObject("msg", "Account created. Admin approval pending.");
 		}
 	
 		return modelAndView;
 	}
 	
-	
+	/**
+	 * This method creates a record in the item table and returns the item that was created.
+	 * 
+	 * @param itemName
+	 * @param description
+	 * @param username
+	 * 
+	 * @return A ModelAndView containing the view name and the tradeItemInfo
+	 */
 	@RequestMapping(value = "/createTradeRequest", method = RequestMethod.POST)
 	public ModelAndView createTradeRequest(
 			@ModelAttribute("itemName") String itemName,
 			@ModelAttribute("description") String description,
 			@ModelAttribute("username") String username) {
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("tradeItemInfo");
+		
+		// TODO Check that the entered data is valid
+		
+		// Ensure that the entered data is sanitized to remove any potentially executable code
+		new DataSanitization().sanitizeString(itemName);
+		new DataSanitization().sanitizeString(description);
+		new DataSanitization().sanitizeString(username);
+		
 		TradeItemInfo tradeItemInfo = new TradeItemInfo();
-		modelAndView.setViewName("tradeItemInfo");
-
 		tradeItemInfo.setItemName(itemName);
 		tradeItemInfo.setDescription(description);
 		tradeItemInfo.setUsername(username);
+		
+		// Create the trade request in the database
 		tradeItemInfo = tradeItem.createTradeItem(tradeItemInfo);
+		
+		// TODO Add some error handling here for if there is an issue with the database insert
 
-		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
+		mav.addObject("tradeItemInfo", tradeItemInfo);
 
-		return modelAndView;
-
+		return mav;
 	}
 
 //	@RequestMapping(value = "/viewTradeItem", method = RequestMethod.POST)
@@ -267,88 +282,76 @@ public class MainController {
 //
 //	}
 	
-	/***************************************************************************************
-	 * Method to approve a user and activate their account
+	/**
+	 * This method approves and activates a user's account
 	 * 
 	 * @param username - registered username of the user being approved
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView for the admin page
+	 */
 	@RequestMapping(value = "/confirmMember", method = RequestMethod.POST)
-	public ModelAndView approverMember(@ModelAttribute("username") String username) {
+	public ModelAndView approverMember(
+			@ModelAttribute("username") String username) {
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("admin");
 
 		// Enable the user's account
-		String result = admin.approveUser(username);
-		String msg = "";
+//		String result = admin.approveUser(username);
 		
-		if (result.equals("Success")) {
-			msg = "User approved and successfully registered.";
-			
-			modelAndView.addObject("msg", msg);
-		}
+		if (admin.approveUser(username).equals("Success")) 
+			mav.addObject("msg", "User approved and activated.");
 
-		// Get the list of users awaiting approval
-		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
+		// Get the updated list of users awaiting approval
+//		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
 		
-		modelAndView.addObject("userList", userList);
-		modelAndView.setViewName("admin");
+		mav.addObject("userList", admin.listUsersForApproval());
 
-		return modelAndView;
+		return mav;
 	}
 	
 
-	/***************************************************************************************
+	/**
+	 * Method for an access denied page
 	 * 
-	 * Method to return the access denied page
-	 * 
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView for the 403 page
+	 */
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public ModelAndView accesssDenied() {
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("403");
 		
 		// Get the currently logged in user
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			System.out.println(userDetail);
-		
-			modelAndView.addObject("username", userDetail.getUsername());
-			
+//			System.out.println(userDetail);
+			mav.addObject("username", userDetail.getUsername());
 		}
-		modelAndView.setViewName("403");
 		
-		return modelAndView;
+		return mav;
 	}
 	
-	/***************************************************************************************
+	/**
+	 * Method for an access denied page
 	 * 
-	 * Method to return the access denied page
-	 * 
-	 * @return - Returns a ModelAndView containing the view name and all details to be displayed
-	 * 
-	 ***************************************************************************************/
+	 * @return A ModelAndView for the 403 page
+	 */
 	@RequestMapping(value = "/403", method = RequestMethod.POST)
 	public ModelAndView accesssDeniedPost() {
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("403");
 		
 		// Get the currently logged in user
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			System.out.println(userDetail);
-		
-			modelAndView.addObject("username", userDetail.getUsername());
-			
+//			System.out.println(userDetail);
+			mav.addObject("username", userDetail.getUsername());
 		}
-		modelAndView.setViewName("403");
 		
-		return modelAndView;
+		return mav;
 	}
-
+	
 }
