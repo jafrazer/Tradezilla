@@ -9,11 +9,8 @@ public class DataSanitization {
 	 */
 	public String sanitizeString(String dataToClean) {
 		
-		String cleanedData = "";
+		// TODO Sanitize the data here: remove angle brackets, remove apostrophes
 		
-		// TODO Sanitize the data here
-		cleanedData = dataToClean;
-		
-		return cleanedData;
+		return dataToClean;
 	}
 }

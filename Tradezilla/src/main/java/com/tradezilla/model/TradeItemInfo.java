@@ -14,9 +14,8 @@ public class TradeItemInfo {
 		super();
 	}
 
-	public TradeItemInfo(String itemId, String itemName, String username, String itemDescription) {
+	public TradeItemInfo(String itemName, String username, String itemDescription) {
 		super();
-		this.setItemId(itemId);
 		this.setItemName(itemName);
 		this.setUsername(username);
 		this.setDescription(itemDescription);
@@ -42,8 +41,8 @@ public class TradeItemInfo {
 		return description;
 	}
 
-	public void setDescription(String itemDescription) {
-		this.description = itemDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getUsername() {

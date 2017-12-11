@@ -34,3 +34,12 @@ CREATE TABLE trade_items (
   CONSTRAINT fk_user_item FOREIGN KEY (username) REFERENCES users (username));
 
 INSERT INTO trade_items (itemname, username, description) VALUES ('test item 001', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 002', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 003', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 004', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 005', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 006', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 007', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 008', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 009', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 010', 'jaf', 'description');

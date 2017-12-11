@@ -39,7 +39,6 @@ import com.tradezilla.dao.Admin;
 import com.tradezilla.dao.Register;
 import com.tradezilla.dao.TradeItem;
 import com.tradezilla.dao.User;
-import com.tradezilla.db.DataSanitization;
 import com.tradezilla.model.TradeItemInfo;
 import com.tradezilla.model.UserAccountInfo;
 
@@ -85,9 +84,7 @@ public class MainController {
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("admin");
-		
-//		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
-		
+				
 		// Display a list of user accounts pending approval
 		mav.addObject("userList", admin.listUsersForApproval());
 
@@ -214,7 +211,6 @@ public class MainController {
 		// Display a message telling the user that registration was successful and is now pending approval
 		if (result.equals("Success")) {
 			modelAndView.setViewName("blank");
-			
 			modelAndView.addObject("msg", "Account created. Admin approval pending.");
 		}
 	
@@ -239,17 +235,13 @@ public class MainController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("tradeItemInfo");
 		
-		// TODO Check that the entered data is valid
-		
-		// Ensure that the entered data is sanitized to remove any potentially executable code
-		new DataSanitization().sanitizeString(itemName);
-		new DataSanitization().sanitizeString(description);
-		new DataSanitization().sanitizeString(username);
-		
 		TradeItemInfo tradeItemInfo = new TradeItemInfo();
 		tradeItemInfo.setItemName(itemName);
 		tradeItemInfo.setDescription(description);
 		tradeItemInfo.setUsername(username);
+
+		// Check that the entered data is valid
+		tradeItem.validateTradeRequest(tradeItemInfo);
 		
 		// Create the trade request in the database
 		tradeItemInfo = tradeItem.createTradeItem(tradeItemInfo);
@@ -257,6 +249,26 @@ public class MainController {
 		// TODO Add some error handling here for if there is an issue with the database insert
 
 		mav.addObject("tradeItemInfo", tradeItemInfo);
+
+		return mav;
+	}
+	
+	/**
+	 * This method searches for a the given search string in the trade item names.
+	 * 
+	 * @param searchString
+	 * 
+	 * @return A ModelAndView containing the view name and the tradeItemInfo
+	 */
+	@RequestMapping(value = "/searchTradeRequests", method = RequestMethod.POST)
+	public ModelAndView searchTradeRequests(
+			@ModelAttribute("searchString") String searchString) {
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("searchResults");
+
+		ArrayList<TradeItemInfo> tradeItemList = new TradeItem().searchForTradeRequest(searchString);
+		mav.addObject("tradeItemList", tradeItemList);
 
 		return mav;
 	}
@@ -295,15 +307,11 @@ public class MainController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("admin");
 
-		// Enable the user's account
-//		String result = admin.approveUser(username);
-		
+		// Enable the user's account		
 		if (admin.approveUser(username).equals("Success")) 
 			mav.addObject("msg", "User approved and activated.");
 
-		// Get the updated list of users awaiting approval
-//		ArrayList<UserAccountInfo> userList = admin.readCandidateUsers();
-		
+		// Get the updated list of users awaiting approval		
 		mav.addObject("userList", admin.listUsersForApproval());
 
 		return mav;
@@ -325,7 +333,6 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-//			System.out.println(userDetail);
 			mav.addObject("username", userDetail.getUsername());
 		}
 		
@@ -347,7 +354,6 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-//			System.out.println(userDetail);
 			mav.addObject("username", userDetail.getUsername());
 		}
 		

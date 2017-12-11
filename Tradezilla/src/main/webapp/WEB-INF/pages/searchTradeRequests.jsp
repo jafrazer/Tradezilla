@@ -22,7 +22,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>User Home</title>
+		<title>Search Results</title>
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -34,44 +34,14 @@
 	<body>
 		<jsp:include page="pageHeader.jsp" />
 		
-		<h3>User Details</h3>
-		
-		<div class="userDetails">
-			<div class="userHeaderLeft">
-				<table>
-	                	<tr>
-	                	    <td><b>Username:</b></td>
-	                    	<td>${userAccountInfo.username}</td>
-		            </tr>
-	    	        </table>
-            </div>
-            
-            <div class="userHeaderRight">
-				<sec:authorize access="hasRole('ROLE_USER')">
-					<!-- For login user -->
-					<c:url value="/j_spring_security_logout" var="logoutUrl" />
-					<form action="${logoutUrl}" method="post" id="logoutForm">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-					</form>
-					<script>
-						function formSubmit() {
-							document.getElementById("logoutForm").submit();
-						}
-					</script>
-
-					<c:if test="${pageContext.request.userPrincipal.name != null}">
-						<a href="javascript:formSubmit()"> Logout</a>
-					</c:if>
-				</sec:authorize>
-			</div>
-        </div>
+		<h3>Search Results</h3>
 	
 		<div class='tradeRequests'>
 			<h3>My Trade Requests</h3>
 			<c:choose>
 				<c:when test="${empty tradeItemList}">There are no trade requests listed.</c:when>
 				<c:otherwise>
-					<c:forEach items="${tradeItemList}" var="item"><a href="tradeItem">${item.itemName}</a> - ${item.description} </br></c:forEach>
+					<c:forEach items="${tradeItemList}" var="item"><a href="">${item.itemName}</a> - ${item.description}</c:forEach>
 				</c:otherwise>
 			</c:choose>
 		</div>

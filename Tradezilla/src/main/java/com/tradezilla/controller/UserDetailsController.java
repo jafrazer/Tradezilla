@@ -71,11 +71,9 @@ public class UserDetailsController {
 		if (!(authentication instanceof AnonymousAuthenticationToken))
 			currentUserName = authentication.getName();
 
-//		User user = new User();
 		UserAccountInfo userAccountInfo = new User().readUserAccountInfo(currentUserName);
 		mav.addObject("userAccountInfo", userAccountInfo);
 		
-//		TradeItem tradeItem = new TradeItem();
 		ArrayList<TradeItemInfo> tradeItemList = new TradeItem().readTradeItemListForUser(currentUserName);
 		mav.addObject("tradeItemList", tradeItemList);
 

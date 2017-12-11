@@ -18,7 +18,7 @@
 	
 	<div>
 		<h3>Trade Item:</h3>
-		${tradeItemInfo.itemName}&nbsp;&nbsp;&nbsp;&nbsp;(${tradeItemInfo.username})
+		${tradeItemInfo.itemName} - created by: (${tradeItemInfo.username})
 		<br />
 		<h3>Description:</h3>
 		${tradeItemInfo.itemDescription} <br />

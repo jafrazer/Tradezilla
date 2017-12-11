@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
+import com.tradezilla.db.DataSanitization;
 import com.tradezilla.model.TradeItemInfo;
 
 public class TradeItem extends DefaultDAO {
@@ -23,7 +24,7 @@ public class TradeItem extends DefaultDAO {
 	 * @param itemDescription
 	 */
 	public TradeItem(String username, String itemName, String itemDescription) {
-		createTradeItem(username, itemName, itemDescription);
+		this.createTradeItem(username, itemName, itemDescription);
 	}
 	
 	/**
@@ -31,28 +32,12 @@ public class TradeItem extends DefaultDAO {
 	 * 
 	 * @param username
 	 * @param itemName
-	 * @param itemDescription
+	 * @param description
 	 * 
 	 * @return The created object, including an object id
 	 */
-	public TradeItemInfo createTradeItem(final String username, final String itemName, final String itemDescription) {
-
-		jdbcTemplate = new JdbcTemplate(dataSource);
-		
-		String sql = "INSERT INTO trade_item (itemName, username, description) VALUES (?,?,?)";
-		PreparedStatementSetter pss = new PreparedStatementSetter() {
-			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, itemName);
-				ps.setString(2, username);
-				ps.setString(2, itemDescription);
-			}
-		};
-		
-		// TODO Ensure that there is no record with this name already created for this user
-		
-		jdbcTemplate.update(sql, pss);	
-		
-		return readByUsernameAndItemName(username, itemName);
+	public TradeItemInfo createTradeItem(final String username, final String itemName, final String description) {
+		return this.createTradeItem(new TradeItemInfo(username, itemName, description));
 	}
 
 	/**
@@ -75,11 +60,35 @@ public class TradeItem extends DefaultDAO {
 			}
 		};
 		
-		// TODO Ensure that there is no record with this name already created for this user
+		validateTradeRequest(tradeItemInfo);
 		
 		jdbcTemplate.update(sql, pss);	
 		
 		return readByUsernameAndItemName(tradeItemInfo.getUsername(), tradeItemInfo.getItemName());
+	}
+
+	/**
+	 * Read all trade requests with the searchString in the name.
+	 * 
+	 * @param searchString
+	 * @return
+	 */
+	public ArrayList<TradeItemInfo> searchForTradeRequest(final String searchString) {
+		
+		jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		ArrayList<TradeItemInfo> searchResults = new ArrayList<TradeItemInfo>();
+		
+		String sql = "SELECT * FROM trade_items WHERE itemName CONTAINS ?";
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, searchString);
+			}
+		};
+		
+		searchResults = jdbcTemplate.query(sql, pss, rseTradeItemInfoArrayList);
+		
+		return searchResults;
 	}
 
 	/**
@@ -106,7 +115,7 @@ public class TradeItem extends DefaultDAO {
 		
 		tradeItemList = jdbcTemplate.query(sql, pss, rseTradeItemInfoArrayList);
 
-		if (1 == tradeItemList.size()) // This might not work if a user creates multiple listings with the exact same title... // TODO
+		if (1 == tradeItemList.size())
 			return tradeItemList.get(0);
 		else
 			return null;
@@ -161,5 +170,17 @@ public class TradeItem extends DefaultDAO {
 		usersTradeItems = jdbcTemplate.query(sql, pss, rseTradeItemInfoArrayList);
 		
 		return usersTradeItems;
+	}
+	
+	public void validateTradeRequest(TradeItemInfo tradeItemInfo) {
+		
+		// TODO Write the validation code
+		
+		// TODO Ensure that there is no record with this name already created for this user
+		
+		// Ensure that the entered data is sanitized to remove any potentially executable code
+		tradeItemInfo.setItemName(new DataSanitization().sanitizeString(tradeItemInfo.getItemName()));
+		tradeItemInfo.setDescription(new DataSanitization().sanitizeString(tradeItemInfo.getDescription()));
+		tradeItemInfo.setUsername(new DataSanitization().sanitizeString(tradeItemInfo.getUsername()));
 	}
 }

@@ -1,4 +1,17 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix = "form"%>
+
+<!-- This code is based on the code from the following sources
+	 
+	 http://www.mkyong.com/tutorials/spring-security-tutorials/
+	  		(Mkyong, 2017)
+	  
+	 www.youtube.com 
+	  		(Shoaib Khan, 2012)
+	 		(Brandon Jones, 2015)
+	 		(IntoProgram, 2015)
+	 		(Thamizh arasaN, 2014)
+ --> 
+ 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>

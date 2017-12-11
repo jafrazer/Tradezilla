@@ -15,27 +15,27 @@
 		<![endif]-->
 	</head>
 
-<body>
-	<jsp:include page="pageHeader.jsp" />
-
-	<!-- Links to the register and login pages -->
-	<div id='center'>
-		<a href="register">Create a new account</a> | <a href="login">Already a member? Login here.</a>
-	</div>
+	<body>
+		<jsp:include page="pageHeader.jsp" />
 	
-	<!-- Blurb -->
-	<div id='center'>
-		<h3>Post a trade request; Receive trade offers; Connect with a trade partner.</h3>
-	</div>
-	
-	<!-- Search bar -->
-	<div  id='center'>
-		<form name='searchForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
-			<h3>Search for your trade target here</h3>
-			<input type="text" name="seachTerm" />
-			<input type="submit" value="Search" />
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</form>
-	</div>
-</body>
+		<!-- Links to the register and login pages -->
+		<div id='center'>
+			<a href="register">Create a new account</a> | <a href="login">Already a member? Login here.</a>
+		</div>
+		
+		<!-- Blurb -->
+		<div id='center'>
+			<h3>Post a trade request; Receive trade offers; Connect with a trade partner.</h3>
+		</div>
+		
+		<!-- Search bar -->
+		<div  id='center'>
+			<form name='searchForm' action="searchTradeRequests" method='POST'>
+				<h3>Search for your trade target here</h3>
+				<input type="text" name="searchString" />
+				<input type="submit" value="Search" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			</form>
+		</div>
+	</body>
 </html>

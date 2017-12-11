@@ -20,8 +20,6 @@ public class User_Test {
 //		
 //		UserAccountInfo testData = new UserAccountInfo(TestConsts.username, new EncryptPassword().encryptPassword(TestConsts.password), true);
 //		
-//		// TODO Test run
-//		
 //		UserAccountInfo expectedResult = new User().readUserAccountInfo(TestConsts.username);
 //
 ////		System.out.println(testData.toString());
