@@ -32,13 +32,13 @@ CREATE TABLE trade_items (
   PRIMARY KEY (id),
   UNIQUE KEY uni_item_id (id, username));
 
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 001', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 002', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 003', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 004', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 005', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 006', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 007', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 008', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 009', 'jaf', 'description');
-INSERT INTO trade_items (itemname, username, description) VALUES ('test item 010', 'jaf', 'description');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 001', 'jaf', 'description 001');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 002', 'jaf', 'description 002');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 003', 'jaf', 'description 003');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 004', 'jaf', 'description 004');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 005', 'jaf', 'description 005');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 006', 'jaf', 'description 006');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 007', 'jaf', 'description 007');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 008', 'jaf', 'description 008');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 009', 'jaf', 'description 009');
+INSERT INTO trade_items (itemname, username, description) VALUES ('test item 010', 'jaf', 'description 010');
