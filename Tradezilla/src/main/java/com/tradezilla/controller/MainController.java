@@ -324,7 +324,7 @@ public class MainController {
 	@RequestMapping(value = "/tradeItemInfo", method = RequestMethod.POST)
 	public ModelAndView viewTradeItem(
 			@ModelAttribute("itemName") String itemName,
-			@ModelAttribute("id") String itemId,
+			@ModelAttribute("itemId") String itemId,
 			@ModelAttribute("username") String username) {
 
 		ModelAndView mav = new ModelAndView();

@@ -71,7 +71,18 @@
 			<c:choose>
 				<c:when test="${empty tradeItemList}">There are no trade requests listed.</c:when>
 				<c:otherwise>
-					<c:forEach items="${tradeItemList}" var="item"><a href="tradeItemInfo">${item.itemName}</a> - ${item.description} </br></c:forEach>
+					<c:forEach items="${tradeItemList}" var="item">
+						<form action="tradeItemInfo" method="POST" id="tradeItemInfoForm">
+							<p>
+								<input type="hidden" name="itemName" value="${item.itemName}" /> 
+								<input type="hidden" name="description" value="${item.description}" /> 
+								<input type="hidden" name="itemId" value="${item.itemId}" /> 
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								<input class="tradeItemInfoButton" type="submit" value="View" />
+								<a href="tradeItemInfo">${item.itemName}</a> - ${item.description}
+							</p> 
+						</form>
+					</c:forEach>
 				</c:otherwise>
 			</c:choose>
 		</div>
