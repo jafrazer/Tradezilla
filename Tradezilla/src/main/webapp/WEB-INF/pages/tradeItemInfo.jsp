@@ -17,11 +17,10 @@
 	<jsp:include page="pageHeader.jsp" />
 	
 	<div>
-		<h3>Trade Item:</h3>
-		${tradeItemInfo.itemName} - created by: (${tradeItemInfo.username})
-		<br />
+		<h3>${tradeItemInfo.itemName}</h3>
+		<p>created by: ${tradeItemInfo.username}</p>
 		<h3>Description:</h3>
-		${tradeItemInfo.description} <br />
+		<p>${tradeItemInfo.description}</p>
 	</div>
 </body>
 </html>

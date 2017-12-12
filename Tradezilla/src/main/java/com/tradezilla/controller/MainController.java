@@ -304,15 +304,32 @@ public class MainController {
 	 * 
 	 * @return
 	 */
+	@RequestMapping(value = "/tradeItemInfo", method = RequestMethod.GET)
+	public ModelAndView viewTradeItem() {
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("tradeItemInfo");
+
+		return mav;
+	}
+
+	/**
+	 * 
+	 * @param itemName
+	 * @param itemId
+	 * @param username
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/tradeItemInfo", method = RequestMethod.POST)
 	public ModelAndView viewTradeItem(
 			@ModelAttribute("itemName") String itemName,
 			@ModelAttribute("id") String itemId,
 			@ModelAttribute("username") String username) {
 
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView mav = new ModelAndView();
 		TradeItemInfo tradeItemInfo = new TradeItemInfo();
-		modelAndView.setViewName("tradeItemInfo");
+		mav.setViewName("tradeItemInfo");
 
 		TradeItem tradeItem = new TradeItem();
 		tradeItemInfo.setItemId(itemId);
@@ -322,9 +339,9 @@ public class MainController {
 //		tradeItemInfo = tradeItem.readTradeItemById(tradeItemInfo);
 		tradeItemInfo = tradeItem.readByUsernameAndItemName(this.getCurrentUser(), itemName);
 
-		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
+		mav.addObject("tradeItemInfo", tradeItemInfo);
 
-		return modelAndView;
+		return mav;
 
 	}
 	
