@@ -71,7 +71,7 @@
 			<c:choose>
 				<c:when test="${empty tradeItemList}">There are no trade requests listed.</c:when>
 				<c:otherwise>
-					<c:forEach items="${tradeItemList}" var="item"><a href="tradeItem">${item.itemName}</a> - ${item.description} </br></c:forEach>
+					<c:forEach items="${tradeItemList}" var="item"><a href="tradeItemInfo">${item.itemName}</a> - ${item.description} </br></c:forEach>
 				</c:otherwise>
 			</c:choose>
 		</div>

@@ -50,13 +50,13 @@ public class TradeItem extends DefaultDAO {
 	public TradeItemInfo createTradeItem(final TradeItemInfo tradeItemInfo) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		
-		String sql = "INSERT INTO trade_item (itemName, username, description) VALUES (?,?,?)";
+		String sql = "INSERT INTO trade_items (itemName, username, description) VALUES (?,?,?)";
 		
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, tradeItemInfo.getItemName());
 				ps.setString(2, tradeItemInfo.getUsername());
-				ps.setString(2, tradeItemInfo.getDescription());
+				ps.setString(3, tradeItemInfo.getDescription());
 			}
 		};
 		

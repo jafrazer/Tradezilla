@@ -1,0 +1,1 @@
+To run this application, the contents of this zip can be imported into a Spring Tools Suite install, or an Eclipse environment with Maven configured.

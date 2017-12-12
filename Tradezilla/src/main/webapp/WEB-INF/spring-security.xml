@@ -10,18 +10,21 @@
 
     <!-- enable use-expressions -->
 	<http auto-config="true" use-expressions="true">
+	
  		<intercept-url pattern="/userDetails/userDetails/*" access="denyAll" />
  		<intercept-url pattern="/userDetails**" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
 		
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
+		
 		<form-login 
 		    login-page="/login" 
 		    default-target-url="/userDetails" 
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
+		
 		<logout logout-success-url="/login?logout"  />
 		
 		<!-- enable csrf protection -->
@@ -34,8 +37,8 @@
 		    <password-encoder ref="encoder" />
 			<jdbc-user-service 
 				data-source-ref="dataSource"
-				users-by-username-query="select username,password, enabled from users where username=?"
-				authorities-by-username-query="select username, role from user_roles where username =?" />
+				users-by-username-query="select username, password, enabled from users where username = ?"
+				authorities-by-username-query="select username, role from user_roles where username = ?" />
 		</authentication-provider>
 	</authentication-manager>
 

@@ -129,12 +129,7 @@ public class MainController {
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
-		// Get the currently logged in user
-		String currentUserName ="";
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-		    currentUserName = auth.getName();
-		}
+		String currentUserName = getCurrentUser();
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("userDetails");
@@ -148,6 +143,16 @@ public class MainController {
 		mav.addObject("tradeItemList", tradeItemList);
 
 		return mav;
+	}
+
+	private String getCurrentUser() {
+		// Get the currently logged in user
+		String currentUserName ="";
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    currentUserName = auth.getName();
+		}
+		return currentUserName;
 	}
 
 	/**
@@ -238,7 +243,7 @@ public class MainController {
 		TradeItemInfo tradeItemInfo = new TradeItemInfo();
 		tradeItemInfo.setItemName(itemName);
 		tradeItemInfo.setDescription(description);
-		tradeItemInfo.setUsername(username);
+		tradeItemInfo.setUsername(this.getCurrentUser());
 
 		// Check that the entered data is valid
 		tradeItem.validateTradeRequest(tradeItemInfo);
@@ -249,6 +254,24 @@ public class MainController {
 		// TODO Add some error handling here for if there is an issue with the database insert
 
 		mav.addObject("tradeItemInfo", tradeItemInfo);
+
+		return mav;
+	}
+	
+	/**
+	 * This method creates a record in the item table and returns the item that was created.
+	 * 
+	 * @param itemName
+	 * @param description
+	 * @param username
+	 * 
+	 * @return A ModelAndView containing the view name and the tradeItemInfo
+	 */
+	@RequestMapping(value = "/createTradeRequest", method = RequestMethod.GET)
+	public ModelAndView createTradeRequest() {
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("createTradeRequest");
 
 		return mav;
 	}
@@ -273,26 +296,37 @@ public class MainController {
 		return mav;
 	}
 
-//	@RequestMapping(value = "/viewTradeItem", method = RequestMethod.POST)
-//	public ModelAndView viewTradeItem(
-//			@ModelAttribute("itemName") String itemName,
-//			@ModelAttribute("id") String itemId,
-//			@ModelAttribute("username") String username) {
-//
-//		ModelAndView modelAndView = new ModelAndView();
-//		TradeItemInfo tradeItemInfo = new TradeItemInfo();
-//		modelAndView.setViewName("tradeItemHome");
-//
-//		TradeItem tradeItem = new TradeItem();
-//		tradeItemInfo.setItemName(itemName);
-//		tradeItemInfo.setUsername(username);
-//		tradeItemInfo = tradeItem.readTradeItem(tradeItemInfo);
-//
-//		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
-//
-//		return modelAndView;
-//
-//	}
+	/**
+	 * 
+	 * @param itemName
+	 * @param itemId
+	 * @param username
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/tradeItemInfo", method = RequestMethod.POST)
+	public ModelAndView viewTradeItem(
+			@ModelAttribute("itemName") String itemName,
+			@ModelAttribute("id") String itemId,
+			@ModelAttribute("username") String username) {
+
+		ModelAndView modelAndView = new ModelAndView();
+		TradeItemInfo tradeItemInfo = new TradeItemInfo();
+		modelAndView.setViewName("tradeItemInfo");
+
+		TradeItem tradeItem = new TradeItem();
+		tradeItemInfo.setItemId(itemId);
+		tradeItemInfo.setItemName(itemName);
+		tradeItemInfo.setUsername(this.getCurrentUser());
+		
+//		tradeItemInfo = tradeItem.readTradeItemById(tradeItemInfo);
+		tradeItemInfo = tradeItem.readByUsernameAndItemName(this.getCurrentUser(), itemName);
+
+		modelAndView.addObject("tradeItemInfo", tradeItemInfo);
+
+		return modelAndView;
+
+	}
 	
 	/**
 	 * This method approves and activates a user's account
