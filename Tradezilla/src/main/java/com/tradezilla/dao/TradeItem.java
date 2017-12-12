@@ -79,10 +79,11 @@ public class TradeItem extends DefaultDAO {
 		
 		ArrayList<TradeItemInfo> searchResults = new ArrayList<TradeItemInfo>();
 		
-		String sql = "SELECT * FROM trade_items WHERE itemName CONTAINS ?";
+		String sql = "SELECT * FROM trade_items WHERE itemName LIKE ?";
+		final String wildcardSearchString = "%" + searchString + "%";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, searchString);
+				ps.setString(1, wildcardSearchString);
 			}
 		};
 		
@@ -106,6 +107,7 @@ public class TradeItem extends DefaultDAO {
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 		
 		String sql = "SELECT * FROM trade_items WHERE username = ? AND itemName = ?";
+//		final String wildcardSearchString = "%" + itemName + "%";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, username);
@@ -133,7 +135,7 @@ public class TradeItem extends DefaultDAO {
 		
 		ArrayList<TradeItemInfo> tradeItemList = new ArrayList<TradeItemInfo>();
 		
-		String sql = "SELECT * FROM trade_items WHERE itemId = ?";
+		String sql = "SELECT * FROM trade_items WHERE id = ?";
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, tradeItemInfo.getItemId());;

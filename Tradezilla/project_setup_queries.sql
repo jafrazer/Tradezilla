@@ -30,8 +30,7 @@ CREATE TABLE trade_items (
   username varchar(45) NOT NULL,
   description varchar(1000) NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY uni_item_id (id, username),
-  CONSTRAINT fk_user_item FOREIGN KEY (username) REFERENCES users (username));
+  UNIQUE KEY uni_item_id (id, username));
 
 INSERT INTO trade_items (itemname, username, description) VALUES ('test item 001', 'jaf', 'description');
 INSERT INTO trade_items (itemname, username, description) VALUES ('test item 002', 'jaf', 'description');

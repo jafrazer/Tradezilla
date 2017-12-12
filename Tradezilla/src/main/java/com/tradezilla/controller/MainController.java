@@ -57,6 +57,16 @@ public class MainController {
 	@Autowired
 	TradeItem tradeItem;
 
+	private String getCurrentUser() {
+		// Get the currently logged in user
+		String currentUserName ="";
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    currentUserName = auth.getName();
+		}
+		return currentUserName;
+	}
+
 	/**
 	 * Method to direct to the main page
 	 * 
@@ -143,16 +153,6 @@ public class MainController {
 		mav.addObject("tradeItemList", tradeItemList);
 
 		return mav;
-	}
-
-	private String getCurrentUser() {
-		// Get the currently logged in user
-		String currentUserName ="";
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-		    currentUserName = auth.getName();
-		}
-		return currentUserName;
 	}
 
 	/**
@@ -283,14 +283,14 @@ public class MainController {
 	 * 
 	 * @return A ModelAndView containing the view name and the tradeItemInfo
 	 */
-	@RequestMapping(value = "/searchTradeRequests", method = RequestMethod.POST)
-	public ModelAndView searchTradeRequests(
+	@RequestMapping(value = "/searchResults", method = RequestMethod.POST)
+	public ModelAndView searchResults(
 			@ModelAttribute("searchString") String searchString) {
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("searchResults");
 
-		ArrayList<TradeItemInfo> tradeItemList = new TradeItem().searchForTradeRequest(searchString);
+		ArrayList<TradeItemInfo> tradeItemList = tradeItem.searchForTradeRequest(searchString);
 		mav.addObject("tradeItemList", tradeItemList);
 
 		return mav;
@@ -323,26 +323,18 @@ public class MainController {
 	 */
 	@RequestMapping(value = "/tradeItemInfo", method = RequestMethod.POST)
 	public ModelAndView viewTradeItem(
+			@ModelAttribute("id") String id,
 			@ModelAttribute("itemName") String itemName,
-			@ModelAttribute("itemId") String itemId,
 			@ModelAttribute("username") String username) {
 
 		ModelAndView mav = new ModelAndView();
-		TradeItemInfo tradeItemInfo = new TradeItemInfo();
 		mav.setViewName("tradeItemInfo");
-
-		TradeItem tradeItem = new TradeItem();
-		tradeItemInfo.setItemId(itemId);
-		tradeItemInfo.setItemName(itemName);
-		tradeItemInfo.setUsername(this.getCurrentUser());
 		
-//		tradeItemInfo = tradeItem.readTradeItemById(tradeItemInfo);
-		tradeItemInfo = tradeItem.readByUsernameAndItemName(this.getCurrentUser(), itemName);
-
+		TradeItemInfo tradeItemInfo = tradeItem.readByUsernameAndItemName(username, itemName);
+		
 		mav.addObject("tradeItemInfo", tradeItemInfo);
 
 		return mav;
-
 	}
 	
 	/**

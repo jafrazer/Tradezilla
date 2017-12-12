@@ -74,12 +74,13 @@
 					<c:forEach items="${tradeItemList}" var="item">
 						<form action="tradeItemInfo" method="POST" id="tradeItemInfoForm">
 							<p>
-								<input type="hidden" name="itemName" value="${item.itemName}" /> 
-								<input type="hidden" name="description" value="${item.description}" /> 
-								<input type="hidden" name="itemId" value="${item.itemId}" /> 
+								<%-- <input type="hidden" name="tradeItemInfo" value="${item}" /> --%>
+								<input type="hidden" name="id" value="${item.itemId}" />
+								<input type="hidden" name="itemName" value="${item.itemName}" />
+								<input type="hidden" name="username" value="${item.username}" />
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								<input class="tradeItemInfoButton" type="submit" value="View" />
-								<a href="tradeItemInfo">${item.itemName}</a> - ${item.description}
+								${item.itemName} - ${item.description}
 							</p> 
 						</form>
 					</c:forEach>

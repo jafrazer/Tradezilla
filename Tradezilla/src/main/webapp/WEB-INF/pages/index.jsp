@@ -30,7 +30,7 @@
 		
 		<!-- Search bar -->
 		<div  id='center'>
-			<form name='searchForm' action="searchTradeRequests" method='POST'>
+			<form name='searchForm' action="searchResults" method='POST'>
 				<h3>Search for your trade target here</h3>
 				<input type="text" name="searchString" />
 				<input type="submit" value="Search" />
